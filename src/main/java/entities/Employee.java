@@ -14,10 +14,8 @@ public class Employee {
 	private String adress;
 	
 	// Appel au constructeur vide
-	public void Employee () {
-		
+	public void Employee () {	
 	}
-	
 	
 	// Précise que la colonne nommée "id" dans la bdd correspond à un id 
 	@Id 
@@ -31,7 +29,7 @@ public class Employee {
 	public void setId(long id) {
 		this.id = id;
 	}
-
+	
 	public String getLastName() {
 		return lastName;
 	}
@@ -47,7 +45,7 @@ public class Employee {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
+	
 	public String getMailAdress() {
 		return mailAdress;
 	}
@@ -63,7 +61,7 @@ public class Employee {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
+	
 	public int getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -79,6 +77,16 @@ public class Employee {
 	public void setAdress(String adress) {
 		this.adress = adress;
 	}
+
+	@Override
+	public String toString() {
+		return "Employee [lastName=" + lastName + ", firstName=" + firstName + ", mailAdress=" + mailAdress + ", role="
+				+ role + ", phoneNumber=" + phoneNumber + ", adress=" + adress + "]";
+	}
+
+
+	
+	
 	
 	
 
