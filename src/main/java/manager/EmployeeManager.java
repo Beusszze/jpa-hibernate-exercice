@@ -14,53 +14,60 @@ public class EmployeeManager {
 	
 	// CRUD
 	protected void setup() {
+		// charge une session Hibernate, la récupère pour créer un registry
 		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 		
 		try {
+			// Essaie de se connecter à la bdd
+			// Construction de la session
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 		} catch (Exception e) {
+			// catch une exception si la connexion ne s'établit pas
 			StandardServiceRegistryBuilder.destroy(registry);
 			e.getStackTrace();
 		}
 		
 	}
 	
+	// méthode qui ferme la session Hibernate
 	protected void exit () {
 		sessionFactory.close();
 	}
 	
+	// méthode 
 	protected void create () {
-		Employee employee = new Employee ();
-		employee.setLastName("Nakamoto");
-		employee.setFirstName("Satoshi");
-		employee.setMailAdress("sato@gmail.com");
-		employee.setRole("CEO");
-		employee.setPhoneNumber(0606060606);
-		employee.setAdress("1 rue des Huns");
-		
 		Employee employee1 = new Employee ();
-		employee1.setLastName("Aouar");
-		employee1.setFirstName("Houssem");
-		employee1.setMailAdress("aouar@ol.fr");
-		employee1.setRole("Developpeur");
-		employee1.setPhoneNumber(0707070707);
-		employee1.setAdress("2 rue des Deux");
-
+		employee1.setLastName("Nakamoto");
+		employee1.setFirstName("Satoshi");
+		employee1.setMailAdress("sato@gmail.com");
+		employee1.setRole("CEO");
+		employee1.setPhoneNumber(0606060606);
+		employee1.setAdress("1 rue des Huns");
+		
 		Employee employee2 = new Employee ();
 		employee2.setLastName("Aouar");
 		employee2.setFirstName("Houssem");
 		employee2.setMailAdress("aouar@ol.fr");
-		employee2.setRole("Chef");
+		employee2.setRole("Developpeur");
 		employee2.setPhoneNumber(0707070707);
 		employee2.setAdress("2 rue des Deux");
 
+
 		
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.save(employee2);
-		session.getTransaction().commit();
+		Session session1 = sessionFactory.openSession();
+		session1.beginTransaction();
+		session1.save(employee1);
+		session1.getTransaction().commit();
+		session1.close();
 		
-		session.close();
+		
+		Session session2 = sessionFactory.openSession();
+		session2.beginTransaction();
+		session2.save(employee2);
+		session2.getTransaction().commit();
+		session2.close();
+
+		
 	}
 	
 	protected Employee findById (long id) {	
@@ -69,7 +76,7 @@ public class EmployeeManager {
 		employee.toString();
 		return employee;
 	}
-	
+		
 	protected void update (long id, Employee newEmployee) {	
 		Employee employee = this.findById(id);
 		
@@ -114,10 +121,13 @@ public class EmployeeManager {
 		EmployeeManager manager = new EmployeeManager();
 		manager.setup();
 //		manager.create(); // Create OK 
-//		Employee employee = manager.findById(8); // toString n'affiche rien mais find OK
+		Employee employee = new Employee ();
+		employee.setRole("Stagiaire");
+
+//		Employee employee = manager.findById(18); // toString n'affiche rien mais find OK
 //		manager.delete(employee);	 // Delete OK
-//		Employee employee = manager.findById(14); 
-//		manager.update(10, employee);	// Update OK
+//		Employee employee1 = manager.findById(16); 
+		manager.update(16, employee);	// Update OK, besoin d'instancier un nouvel objet de type Employee en dur
 		manager.exit();
 	}
 	
