@@ -9,6 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import entities.Employee;
 
 public class EmployeeManager {
+	
 	protected SessionFactory sessionFactory;
 	
 	
@@ -34,7 +35,7 @@ public class EmployeeManager {
 		sessionFactory.close();
 	}
 	
-	// méthode 
+	// méthode permettant de créer un enregistrement dans la bdd
 	protected void create () {
 		Employee employee1 = new Employee ();
 		employee1.setLastName("Nakamoto");
@@ -54,11 +55,11 @@ public class EmployeeManager {
 
 
 		
-		Session session1 = sessionFactory.openSession();
-		session1.beginTransaction();
-		session1.save(employee1);
-		session1.getTransaction().commit();
-		session1.close();
+		Session session1 = sessionFactory.openSession(); //Ouverture d'une session de connexion à la bdd
+		session1.beginTransaction(); //transaction entre le back et la bdd
+		session1.save(employee1); // ORM récupère la requête de la bdd 
+		session1.getTransaction().commit(); // Sauvegarde de cette requête 
+		session1.close(); //fermeture de la session, les données ont été récupéré
 		
 		
 		Session session2 = sessionFactory.openSession();
@@ -69,7 +70,11 @@ public class EmployeeManager {
 
 		
 	}
-	
+	/**
+	 * Méthode qui permet la lecture d'un enregistrement à partir de son id
+	 * @param id l'id de l'employé que l'on cherche
+	 * @return l'employé correspondant à l'id
+	 */
 	protected Employee findById (long id) {	
 		Session session = sessionFactory.openSession();
 		Employee employee = session.get(Employee.class, id);
@@ -77,29 +82,39 @@ public class EmployeeManager {
 		return employee;
 	}
 		
+	/**
+	 * Méthode qui permet la mise à jour d'un enregistrement
+	 * @param id l'id de l'employé à mettre à jour 
+	 * @param newEmployee le nouvel employé 
+	 */
 	protected void update (long id, Employee newEmployee) {	
+		// Récupère l'employé grâce à la méthode findById
 		Employee employee = this.findById(id);
 		
+		// Série de conditions 
+		// Si un attribut de l'employé est différent de null alors remplacer la valeur de cet attribut
+		// par celle du nouvel employé 
 		if (newEmployee.getLastName() != null) {
 			employee.setLastName(newEmployee.getLastName());
 		}
 		if (newEmployee.getFirstName() != null) {
 			employee.setFirstName(newEmployee.getFirstName());
 		}
-//		if (newEmployee.getMailAdress() != null) {
-//			employee.setMailAdress(newEmployee.getMailAdress());
-//		}
+		if (newEmployee.getMailAdress() != null) {
+			employee.setMailAdress(newEmployee.getMailAdress());
+		}
 		if (newEmployee.getRole() != null) {
 			employee.setRole(newEmployee.getRole());
 		}
-//		if (newEmployee.getPhoneNumber() != employee.getPhoneNumber()) {
-//			employee.setPhoneNumber(newEmployee.getPhoneNumber());
-//		}
+		if (newEmployee.getPhoneNumber() != employee.getPhoneNumber()) {
+			employee.setPhoneNumber(newEmployee.getPhoneNumber());
+		}
 		if (newEmployee.getAdress() != null) {
 			employee.setAdress(newEmployee.getAdress());
 		}
 		
-		
+		// Utilisation d'une session pour effectuer la mise à jour de la base de donnée
+		// fonction .update qui enregistre les modifications apportées à l'employé 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.update(employee);
@@ -107,7 +122,10 @@ public class EmployeeManager {
 		session.close();
 		
 	}
-	
+	/**
+	 * Méthode permettant la suppression d'un employé dans la bdd
+	 * @param employee l'employé à supprimer
+	 */
 	protected void delete (Employee employee) {	
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
